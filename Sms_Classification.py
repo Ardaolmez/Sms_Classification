@@ -10,7 +10,7 @@ Original file is located at
 # import libraries
 try:
   # %tensorflow_version only exists in Colab.
-  !pip install tf-nightly
+  #!pip install tf-nightly
 except Exception:
   pass
 import tensorflow as tf
@@ -22,10 +22,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 print(tf.__version__)
-
-# get data files
-!wget https://cdn.freecodecamp.org/project-data/sms/train-data.tsv
-!wget https://cdn.freecodecamp.org/project-data/sms/valid-data.tsv
 
 train_file_path = "train-data.tsv"
 test_file_path = "valid-data.tsv"
@@ -136,6 +132,7 @@ from torch.nn import functional as F
 class sms(nn.Module):
     def __init__(self, max_words, max_len):
         super(sms, self).__init__()
+        # this is our model. We use lstm.
         self.embedding = nn.Embedding(max_words, 32)
         self.lstm = nn.LSTM(32, 64)
         self.dense1 = nn.Linear(64, 128)
@@ -165,7 +162,7 @@ class sms(nn.Module):
             B,T,C = logits.shape
             logits=logits.mean(1)
             targets = targets.long()
-            loss = F.cross_entropy(logits,targets,weight=class_weight)
+            loss = F.cross_entropy(logits,targets,weight=class_weight) #we use crossentropy to calculate loss
         return logits, loss
 
 # Example usage
@@ -176,7 +173,7 @@ model = sms(max_words, max_len)
 
 # Perform a forward pass to compute the loss
 outputs = model(sequences_matrix)
-
+#hyperparameter
 learning_rate = 1e-3
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
 block_size = 32
